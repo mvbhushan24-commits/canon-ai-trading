@@ -6,8 +6,11 @@ from decimal import Decimal
 import pytest
 
 from backend.engines.market_data import NormalizedCandle
+from backend.engines.market_liquidity.config import MarketLiquidityConfig
+from backend.engines.market_liquidity.publisher import LiquidityEventPublisher
 from backend.engines.market_structure.config import MarketStructureConfig
 from backend.engines.market_structure.publisher import StructureEventPublisher
+from tests.unit.engines.liquidity_conftest import build_sample_structure
 
 
 def make_candle(
@@ -95,4 +98,36 @@ def structure_publisher() -> StructureEventPublisher:
 
 @pytest.fixture
 def bullish_candles() -> list[NormalizedCandle]:
+    return build_bullish_structure_candles(30)
+
+
+@pytest.fixture
+def liquidity_config() -> MarketLiquidityConfig:
+    return MarketLiquidityConfig(
+        enabled=True,
+        timeframes=["H1", "H4"],
+        equal_high_tolerance=10.0,
+        equal_low_tolerance=10.0,
+        pip_size=0.1,
+        minimum_cluster_size=2,
+        lookback=50,
+        min_candles=10,
+        session_filter=["asian", "london", "new_york"],
+        sweep_rejection_ratio=0.4,
+        zone_buffer_pips=2.0,
+    )
+
+
+@pytest.fixture
+def liquidity_publisher() -> LiquidityEventPublisher:
+    return LiquidityEventPublisher()
+
+
+@pytest.fixture
+def sample_structure():
+    return build_sample_structure()
+
+
+@pytest.fixture
+def liquidity_candles() -> list[NormalizedCandle]:
     return build_bullish_structure_candles(30)
