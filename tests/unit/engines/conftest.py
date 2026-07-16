@@ -1,0 +1,98 @@
+"""Shared fixtures for engine unit tests."""
+
+from datetime import UTC, datetime, timedelta
+from decimal import Decimal
+
+import pytest
+
+from backend.engines.market_data import NormalizedCandle
+from backend.engines.market_structure.config import MarketStructureConfig
+from backend.engines.market_structure.publisher import StructureEventPublisher
+
+
+def make_candle(
+    *,
+    symbol: str = "XAUUSD",
+    timeframe: str = "H1",
+    open_time: datetime,
+    open_price: Decimal,
+    high: Decimal,
+    low: Decimal,
+    close: Decimal,
+    is_closed: bool = True,
+) -> NormalizedCandle:
+    return NormalizedCandle(
+        symbol=symbol,
+        timeframe=timeframe,
+        open=open_price,
+        high=high,
+        low=low,
+        close=close,
+        volume=100,
+        open_time_utc=open_time,
+        close_time_utc=open_time + timedelta(hours=1),
+        is_closed=is_closed,
+    )
+
+
+def build_bullish_structure_candles(count: int = 30) -> list[NormalizedCandle]:
+    """Build synthetic candles with swing-friendly price action."""
+    start = datetime(2026, 1, 1, tzinfo=UTC)
+    candles: list[NormalizedCandle] = []
+    price = Decimal("2300")
+
+    for index in range(count):
+        wave = index % 6
+        if wave in {0, 1}:
+            open_p = price
+            close_p = price + Decimal("5")
+            high_p = close_p + Decimal("2")
+            low_p = open_p - Decimal("1")
+            price = close_p
+        elif wave in {2, 3}:
+            open_p = price
+            close_p = price - Decimal("4")
+            high_p = open_p + Decimal("1")
+            low_p = close_p - Decimal("2")
+            price = close_p
+        else:
+            open_p = price
+            close_p = price + Decimal("6")
+            high_p = close_p + Decimal("3")
+            low_p = open_p - Decimal("1")
+            price = close_p
+
+        candles.append(
+            make_candle(
+                open_time=start + timedelta(hours=index),
+                open_price=open_p,
+                high=high_p,
+                low=low_p,
+                close=close_p,
+            )
+        )
+
+    return candles
+
+
+@pytest.fixture
+def structure_config() -> MarketStructureConfig:
+    return MarketStructureConfig(
+        enabled=True,
+        timeframes=["H1", "H4"],
+        swing_lookback=2,
+        internal_swing_lookback=1,
+        external_swing_lookback=2,
+        min_confidence=0.3,
+        min_candles=10,
+    )
+
+
+@pytest.fixture
+def structure_publisher() -> StructureEventPublisher:
+    return StructureEventPublisher()
+
+
+@pytest.fixture
+def bullish_candles() -> list[NormalizedCandle]:
+    return build_bullish_structure_candles(30)

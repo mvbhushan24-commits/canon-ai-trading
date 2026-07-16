@@ -21,10 +21,23 @@ market_data:
   history_bars: 500
   stale_threshold_sec: 30
 
+# Market Structure Engine configuration (Sprint 2)
+market_structure:
+  enabled: true
+  timeframes:
+    - M15
+    - H1
+    - H4
+  swing_lookback: 5
+  internal_swing_lookback: 2
+  external_swing_lookback: 5
+  min_confidence: 0.5
+  min_candles: 10
+
 # Engine toggles (future sprints)
 engines:
   market_data: true
-  market_structure: false
+  market_structure: true
   smart_money: false
   liquidity: false
   trend: false
