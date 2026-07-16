@@ -1,0 +1,56 @@
+# Breaker Block Engine configuration (Sprint 6.2)
+market_breaker:
+  enabled: true
+  timeframes:
+    - M15
+    - H1
+    - H4
+  min_candles: 20
+  lookback: 100
+  pip_size: 0.1
+
+  # Formation
+  min_zone_size_pips: 2.0
+  min_source_quality: medium
+  fvg_breaker_enabled: false
+  deduplicate_by_source: true
+
+  # Confirmation
+  confirmation_mode: wick_touch
+  min_bars_after_invalidation: 1
+  max_bars_after_invalidation: 50
+  require_displacement_after_invalidation: false
+  rejection_wick_ratio: 0.5
+
+  # Lifecycle
+  max_breaker_age_bars: 150
+  invalidation_mode: close
+  mitigation_mode: wick
+  mitigation_percent: 50.0
+
+  # Premium / discount
+  dealing_range_mode: external
+  equilibrium_tolerance_pips: 3.0
+
+  # Confluence
+  use_liquidity_confluence: true
+  liquidity_proximity_pips: 5.0
+  use_fvg_confluence: true
+  fvg_ce_proximity_pips: 3.0
+  fvg_overlap_min_percent: 10.0
+
+  # Quality & filtering
+  min_quality_score: 0.4
+  require_structure_alignment: false
+  quality_weights:
+    source_quality: 0.20
+    invalidation_strength: 0.15
+    confirmation: 0.20
+    structure: 0.15
+    liquidity: 0.10
+    fvg: 0.10
+    premium_discount: 0.05
+    freshness: 0.05
+
+engines:
+  market_breaker: true
