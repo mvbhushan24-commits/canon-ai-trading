@@ -39,7 +39,7 @@ Sprint 1 and beyond require **Product Owner approval** before implementation beg
 
 Engines are placeholders until assigned by the Product Owner:
 
-- Data Ingestion (MT5 / XMGlobal)
+- Market Data Engine (MT5 / XMGlobal)
 - Market Structure
 - Smart Money Concepts
 - Liquidity

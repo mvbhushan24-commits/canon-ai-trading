@@ -20,7 +20,7 @@ Canon AI Trading is an engine-based platform that ingests XAUUSD market data, ru
                            │
     ┌──────────────────────┼──────────────────────┐
     ▼                      ▼                      ▼
- Data Ingestion      Analysis Engines       Decision Engine
+ Market Data         Analysis Engines       Decision Engine
  (MT5 / XMGlobal)    (SMC, structure,       (signals / NO TRADE)
                      liquidity, trend,
                      price action, macro,
@@ -50,7 +50,7 @@ Independent engines under `backend/engines/`:
 
 | Engine | Responsibility |
 |--------|----------------|
-| `data_ingestion` | Live XAUUSD data from MT5 (XMGlobal) |
+| `market_data` | Live XAUUSD data from MT5 (XMGlobal) |
 | `market_structure` | Market structure analysis |
 | `smart_money` | Smart Money Concepts |
 | `liquidity` | Liquidity analysis |

@@ -15,7 +15,7 @@ Build a professional Gold trading intelligence platform that prioritizes signal 
 
 ## Phase 2 — Data & Infrastructure
 
-- Data Ingestion Engine (MT5 / XMGlobal)
+- Market Data Engine (MT5 / XMGlobal)
 - Database models and persistence
 - API foundation
 

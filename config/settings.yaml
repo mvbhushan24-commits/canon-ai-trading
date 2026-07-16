@@ -2,12 +2,12 @@
 app:
   name: "Canon AI Trading"
   version: "0.1.0"
-  symbol: "XAUUSD"
+  symbol: "GOLD.i#"
   broker: "XMGlobal"
 
 # Market Data Engine configuration (Sprint 1)
 market_data:
-  symbol: "XAUUSD"
+  symbol: "GOLD.i#"
   broker: "XMGlobal"
   timeframes:
     - M1
