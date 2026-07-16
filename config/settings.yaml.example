@@ -1,0 +1,25 @@
+# Application metadata
+app:
+  name: "Canon AI Trading"
+  version: "0.1.0"
+  symbol: "XAUUSD"
+  broker: "XMGlobal"
+
+# Engine toggles (future sprints)
+engines:
+  data_ingestion: false
+  market_structure: false
+  smart_money: false
+  liquidity: false
+  trend: false
+  price_action: false
+  macro_events: false
+  news: false
+  volatility: false
+  risk: false
+  decision: false
+  notification: false
+
+# Logging
+logging:
+  level: "INFO"
