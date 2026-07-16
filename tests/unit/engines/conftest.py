@@ -8,9 +8,12 @@ import pytest
 from backend.engines.market_data import NormalizedCandle
 from backend.engines.market_liquidity.config import MarketLiquidityConfig
 from backend.engines.market_liquidity.publisher import LiquidityEventPublisher
+from backend.engines.market_order_block.config import OrderBlockConfig
+from backend.engines.market_order_block.publisher import OrderBlockEventPublisher
 from backend.engines.market_structure.config import MarketStructureConfig
 from backend.engines.market_structure.publisher import StructureEventPublisher
 from tests.unit.engines.liquidity_conftest import build_sample_structure
+from tests.unit.engines.order_block_conftest import build_bullish_order_block_candles
 
 
 def make_candle(
@@ -131,3 +134,33 @@ def sample_structure():
 @pytest.fixture
 def liquidity_candles() -> list[NormalizedCandle]:
     return build_bullish_structure_candles(30)
+
+
+@pytest.fixture
+def order_block_config() -> OrderBlockConfig:
+    return OrderBlockConfig(
+        enabled=True,
+        timeframes=["H1", "H4"],
+        min_candles=10,
+        lookback=50,
+        zone_mode="body",
+        min_displacement_pips=5.0,
+        min_impulse_candles=2,
+        pip_size=0.1,
+        max_block_age_bars=200,
+        min_quality_score=0.4,
+        require_structure_alignment=False,
+        use_liquidity_confluence=True,
+        mitigation_touch_mode="wick",
+        invalidation_mode="close",
+    )
+
+
+@pytest.fixture
+def order_block_publisher() -> OrderBlockEventPublisher:
+    return OrderBlockEventPublisher()
+
+
+@pytest.fixture
+def order_block_candles() -> list[NormalizedCandle]:
+    return build_bullish_order_block_candles(25)

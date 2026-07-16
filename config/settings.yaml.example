@@ -54,11 +54,37 @@ market_liquidity:
   sweep_rejection_ratio: 0.5
   zone_buffer_pips: 2.0
 
+# Order Block Engine configuration (Sprint 4.2)
+order_block:
+  enabled: true
+  timeframes:
+    - M15
+    - H1
+    - H4
+  min_candles: 20
+  lookback: 100
+  zone_mode: body
+  min_displacement_pips: 5.0
+  min_impulse_candles: 2
+  pip_size: 0.1
+  max_block_age_bars: 200
+  min_quality_score: 0.4
+  require_structure_alignment: false
+  use_liquidity_confluence: true
+  mitigation_touch_mode: wick
+  invalidation_mode: close
+  quality_weights:
+    displacement: 0.35
+    structure: 0.30
+    liquidity: 0.20
+    freshness: 0.15
+
 # Engine toggles (future sprints)
 engines:
   market_data: true
   market_structure: true
   market_liquidity: true
+  order_block: true
   smart_money: false
   liquidity: false
   trend: false
