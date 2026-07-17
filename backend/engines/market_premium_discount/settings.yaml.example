@@ -1,0 +1,109 @@
+# Premium / Discount Engine configuration (Sprint 8.2)
+market_premium_discount:
+  enabled: true
+  timeframes:
+    - M15
+    - H1
+    - H4
+  min_candles: 20
+  lookback: 100
+  pip_size: 0.1
+
+  # Dealing range
+  primary_range_mode: external
+  min_range_size_pips: 10.0
+  max_range_age_bars: 200
+  allow_same_bar_range: false
+  invalidate_on_bos: true
+  invalidate_on_choch: false
+  swing_replacement_mode: latest
+
+  # Swing anchor selection
+  swing_selection_mode: latest_confirmed
+  swing_lookback_bars: 100
+  min_swing_quality_score: 0.3
+  prefer_labeled_swings: true
+
+  # Classification
+  equilibrium_tolerance_pips: 3.0
+  price_reference: close
+
+  # Arrays
+  array_cluster_pips: 8.0
+  min_array_entries: 2
+  max_arrays_per_territory: 5
+  include_liquidity_zones: true
+
+  # Internal range
+  compute_internal_bands: true
+
+  # MTF
+  mtf_alignment_min_score: 0.5
+  htf_range_overlap_min_percent: 20.0
+  htf_array_overlap_min_percent: 15.0
+
+  # Nesting
+  nest_overlap_min_percent: 80.0
+  nesting_enabled: true
+
+  # Fibonacci
+  fibonacci:
+    enabled: true
+    direction_mode: structure_trend
+    levels:
+      - 0.0
+      - 0.236
+      - 0.382
+      - 0.5
+      - 0.618
+      - 0.705
+      - 0.79
+      - 1.0
+
+  # OTE (Optimal Trade Entry)
+  ote:
+    enabled: true
+    fib_low: 0.62
+    fib_high: 0.79
+    default_direction: bullish
+    require_zone_overlap: false
+    min_overlapping_zones: 1
+
+  # Institutional context
+  institutional:
+    max_narrative_lines: 12
+    include_htf_in_narrative: true
+    include_ote_in_narrative: true
+
+  # Zone status filters (upstream)
+  zone_filters:
+    order_block_statuses:
+      - fresh
+      - mitigated
+    fvg_statuses:
+      - open
+      - partial
+    breaker_statuses:
+      - confirmed
+      - candidate
+    mitigation_statuses:
+      - fresh
+      - partial
+      - confirmed
+
+  # Quality & filtering
+  min_quality_score: 0.4
+  quality_weights:
+    swing_quality: 0.15
+    structure_quality: 0.15
+    liquidity_confirmation: 0.10
+    htf_alignment: 0.15
+    fvg_alignment: 0.08
+    order_block_alignment: 0.08
+    breaker_alignment: 0.07
+    mitigation_alignment: 0.07
+    freshness: 0.05
+    distance_from_equilibrium: 0.10
+
+engines:
+  market_premium_discount: true

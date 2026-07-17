@@ -1,0 +1,106 @@
+"""Premium / Discount Engine — institutional pricing context layer.
+
+Sprint 8.2: dealing ranges, premium/discount classification, arrays, Fibonacci/OTE,
+MTF alignment, nested zones, and institutional pricing context.
+Consumes NormalizedCandle from Market Data Engine, MarketStructure from Market Structure
+Engine, and optional LiquidityState, OrderBlock, FairValueGapState, BreakerBlock, and
+MitigationBlock from upstream engines.
+"""
+
+from backend.engines.market_premium_discount.config import (
+    PremiumDiscountConfig,
+    PremiumDiscountQualityWeights,
+    ZoneStatusFilters,
+    load_market_premium_discount_config,
+)
+from backend.engines.market_premium_discount.engine import PremiumDiscountEngine
+from backend.engines.market_premium_discount.events import PremiumDiscountAnalysisEvent
+from backend.engines.market_premium_discount.exceptions import (
+    DealingRangeInvalidError,
+    InsufficientDataError,
+    InvalidBreakerBlocksError,
+    InvalidFVGStateError,
+    InvalidHTFContextError,
+    InvalidLiquidityStateError,
+    InvalidMitigationBlocksError,
+    InvalidOrderBlocksError,
+    InvalidStructureError,
+    PremiumDiscountError,
+    StateCorruptError,
+    UnsupportedTimeframeError,
+    ValidationError,
+)
+from backend.engines.market_premium_discount.publisher import PremiumDiscountEventPublisher
+from backend.engines.market_premium_discount.schemas import (
+    ArrayZoneEntry,
+    DealingRange,
+    DealingRangeScope,
+    EquilibriumLevel,
+    FibDirection,
+    FibonacciDealingRange,
+    FibonacciLevel,
+    HTFPricingContext,
+    InstitutionalArray,
+    InstitutionalPricingContext,
+    InstitutionalZoneType,
+    MTFPremiumDiscountAlignment,
+    NestedZoneContext,
+    OptimalTradeEntryZone,
+    PremiumDiscountAnalysis,
+    PremiumDiscountBias,
+    PremiumDiscountContext,
+    PremiumDiscountEvent,
+    PremiumDiscountEventKind,
+    PremiumDiscountQuality,
+    PremiumDiscountState,
+    PremiumDiscountZone,
+    PriceZoneBand,
+    SwingAnchor,
+)
+
+__all__ = [
+    "ArrayZoneEntry",
+    "DealingRange",
+    "DealingRangeInvalidError",
+    "DealingRangeScope",
+    "EquilibriumLevel",
+    "FibDirection",
+    "FibonacciDealingRange",
+    "FibonacciLevel",
+    "HTFPricingContext",
+    "InsufficientDataError",
+    "InstitutionalArray",
+    "InstitutionalPricingContext",
+    "InstitutionalZoneType",
+    "InvalidBreakerBlocksError",
+    "InvalidFVGStateError",
+    "InvalidHTFContextError",
+    "InvalidLiquidityStateError",
+    "InvalidMitigationBlocksError",
+    "InvalidOrderBlocksError",
+    "InvalidStructureError",
+    "MTFPremiumDiscountAlignment",
+    "NestedZoneContext",
+    "OptimalTradeEntryZone",
+    "PremiumDiscountAnalysis",
+    "PremiumDiscountAnalysisEvent",
+    "PremiumDiscountBias",
+    "PremiumDiscountConfig",
+    "PremiumDiscountContext",
+    "PremiumDiscountEngine",
+    "PremiumDiscountError",
+    "PremiumDiscountEvent",
+    "PremiumDiscountEventKind",
+    "PremiumDiscountEventPublisher",
+    "PremiumDiscountQuality",
+    "PremiumDiscountQualityWeights",
+    "PremiumDiscountState",
+    "PremiumDiscountZone",
+    "PriceZoneBand",
+    "StateCorruptError",
+    "SwingAnchor",
+    "UnsupportedTimeframeError",
+    "ValidationError",
+    "ZoneStatusFilters",
+    "load_market_premium_discount_config",
+]

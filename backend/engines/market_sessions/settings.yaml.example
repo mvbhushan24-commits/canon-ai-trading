@@ -1,0 +1,179 @@
+# Kill Zones & Trading Sessions Engine configuration (Sprint 9.2)
+market_sessions:
+  enabled: true
+  timeframes:
+    - M5
+    - M15
+    - H1
+  min_candles: 20
+  lookback: 500
+  pip_size: 0.1
+
+  # Broker timezone normalization
+  broker_timezone: Europe/Nicosia
+  broker_day_start_hour: 0
+  weekend_trading_enabled: true
+  allow_partial_analysis: true
+
+  sessions:
+    sydney:
+      enabled: true
+      timezone: Australia/Sydney
+      local_start: "07:00"
+      local_end: "16:00"
+
+    tokyo:
+      enabled: true
+      timezone: Asia/Tokyo
+      local_start: "09:00"
+      local_end: "18:00"
+
+    london:
+      enabled: true
+      timezone: Europe/London
+      local_start: "08:00"
+      local_end: "17:00"
+
+    new_york:
+      enabled: true
+      timezone: America/New_York
+      local_start: "08:00"
+      local_end: "17:00"
+
+  kill_zones:
+    require_active_session: false
+
+    asian:
+      enabled: true
+      parent_session: tokyo
+      utc_start: "00:00"
+      utc_end: "03:00"
+      use_dst_adjustment: false
+
+    london_open:
+      enabled: true
+      parent_session: london
+      utc_start: "07:00"
+      utc_end: "10:00"
+      use_dst_adjustment: false
+
+    new_york:
+      enabled: true
+      parent_session: new_york
+      utc_start: "12:00"
+      utc_end: "15:00"
+      use_dst_adjustment: false
+
+    london_close:
+      enabled: true
+      parent_session: london
+      utc_start: "15:00"
+      utc_end: "17:00"
+      use_dst_adjustment: false
+
+  overlaps:
+    sydney_tokyo:
+      enabled: true
+      sessions: [sydney, tokyo]
+    london_new_york:
+      enabled: true
+      sessions: [london, new_york]
+
+  session_phases:
+    pre_open_minutes: 30
+    opening_phase_minutes: 60
+    closing_phase_minutes: 30
+
+  session_priority:
+    order: [london, new_york, tokyo, sydney]
+
+  opens:
+    daily:
+      enabled: true
+      require_closed_candle: true
+    weekly:
+      enabled: true
+      week_start_day: monday
+      require_closed_candle: true
+    monthly:
+      enabled: true
+      require_closed_candle: true
+
+  session_extremes:
+    enabled: true
+    reset_at_daily_open: true
+    cross_validate_liquidity: true
+
+  opening_range:
+    enabled: true
+    duration_minutes: 30
+    min_candles: 2
+    breakout_buffer_pips: 2.0
+    sessions: [london, new_york]
+
+  initial_balance:
+    enabled: true
+    duration_minutes: 60
+    min_candles: 4
+    extension_threshold_pips: 5.0
+    sessions: [london, new_york]
+
+  time_of_day_filter:
+    mode: kill_zone_only
+    allow_list: []
+    block_list: [sydney]
+    block_weekends: false
+    block_holidays: true
+    block_outside_sessions: false
+
+  calendar:
+    weekend_days: [saturday, sunday]
+    holidays:
+      enabled: true
+      dates: []
+      file: null
+    partial_holiday_sessions: []
+    dst:
+      enabled: true
+      transition_window_hours: 24
+
+  transitions:
+    forecast_hours: 24
+    imminent_minutes: 15
+    recent_lookback_hours: 4
+
+  volatility:
+    enabled: true
+    baseline_lookback_sessions: 20
+    low_percentile: 33
+    high_percentile: 67
+    min_candles_for_profile: 10
+
+  liquidity:
+    use_volume: true
+    use_spread: true
+    use_liquidity_engine: true
+    low_volume_percentile: 25
+    high_volume_percentile: 75
+
+  historical_performance:
+    enabled: false
+    lookback_days: 30
+    min_samples: 10
+    metrics:
+      - or_breakout_rate
+      - ib_extension_rate
+      - session_range_expansion
+
+  min_quality_score: 0.4
+  high_quality_threshold: 0.7
+  quality_weights:
+    session_quality: 0.20
+    kill_zone_quality: 0.20
+    overlap_quality: 0.15
+    volatility: 0.15
+    liquidity_availability: 0.15
+    historical_performance: 0.15
+
+engines:
+  market_sessions: true

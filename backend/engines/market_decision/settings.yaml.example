@@ -1,0 +1,164 @@
+# Decision Engine configuration (Sprint 10.2)
+market_decision:
+  enabled: true
+  symbol: GOLD.i#
+  timeframes:
+    - M5
+    - M15
+    - H1
+  pip_size: 0.1
+
+  # Decision lifecycle
+  decision_validity_minutes: 60
+  debounce_seconds: 5
+  wait_timeout_seconds: 120
+  raise_on_error: false
+  publish_pipeline_events: false
+  publish_wait_events: false
+
+  # ── Evidence Collection ───────────────────────────────────────────
+  evidence:
+    min_required_engines: 5
+    stale_weight_factor: 0.5
+    max_evidence_age_seconds:
+      market_structure: 300
+      market_liquidity: 300
+      order_block: 300
+      fair_value_gap: 300
+      market_breaker: 300
+      market_mitigation: 300
+      market_premium_discount: 300
+      market_sessions: 60
+      current_price: 30
+
+  # ── Evidence Weights (must sum to 1.0) ────────────────────────────
+  weights:
+    market_structure: 0.20
+    market_liquidity: 0.15
+    order_block: 0.12
+    fair_value_gap: 0.10
+    market_breaker: 0.08
+    market_mitigation: 0.08
+    market_premium_discount: 0.17
+    market_sessions: 0.10
+
+  # ── Confidence Scoring ────────────────────────────────────────────
+  confidence:
+    min_confidence: 65
+    min_directional_weight: 0.35
+    conflict_penalty:
+      none: 0
+      low: 5
+      medium: 15
+      high: 30
+    stale_penalty_per_engine: 3
+    confluence_bonus_per_zone: 5
+    max_confluence_bonus: 20
+
+  # ── Conflict Detection ────────────────────────────────────────────
+  conflict:
+    warn_threshold: 0.35
+    reject_threshold: 0.55
+
+  # ── Validation Gates ────────────────────────────────────────────────
+  gates:
+    session:
+      enabled: true
+      require_kill_zone: false
+      min_kill_zone_quality: medium
+      allow_equilibrium_trades: true
+
+    structure:
+      enabled: true
+      require_trend_alignment: true
+      require_recent_bos: false
+      bos_lookback_bars: 20
+      allow_range_trades: false
+
+    liquidity:
+      enabled: true
+      require_sweep_or_grab: true
+      liquidity_lookback_bars: 30
+      min_sweep_quality: low
+
+    premium_discount:
+      enabled: true
+      require_ote_for_entry: false
+      allow_equilibrium: true
+      require_mtf_alignment: false
+
+    zones:
+      enabled: true
+      gate_mode: grouped
+      min_zone_confluence: 2
+      max_zone_distance_pips: 15.0
+      individual_requirements:
+        order_block: false
+        fair_value_gap: false
+        market_breaker: false
+        market_mitigation: false
+
+  # ── Entry ───────────────────────────────────────────────────────────
+  entry:
+    max_entry_distance_pips: 10.0
+    prefer_ote: true
+    zone_midpoint_entry: true
+
+  # ── Stop Loss ───────────────────────────────────────────────────────
+  stop_loss:
+    buffer_pips: 2.0
+    prefer_structure_invalidation: true
+    fallback_atr_multiplier: 1.5
+
+  # ── Take Profit ─────────────────────────────────────────────────────
+  take_profit:
+    max_targets: 3
+    prefer_liquidity_pools: true
+    min_target_distance_pips: 5.0
+    rr_fallback_multiplier: 2.0
+
+  # ── Risk Rules ──────────────────────────────────────────────────────
+  risk:
+    min_risk_reward: 2.0
+    max_risk_reward: 8.0
+    max_spread_pips: 3.0
+    max_stop_size_pips: 50.0
+    min_confidence: 65
+    session_restrictions:
+      enabled: true
+      blocked_availability:
+        - closed
+        - pre_open
+      blocked_session_phases: []
+      allowed_kill_zones: []
+      blocked_kill_zones: []
+
+  # ── News Restriction Hook ─────────────────────────────────────────
+  news_restriction:
+    enabled: false
+    hook_path: null
+    default_blocked: false
+
+  # ── Decision Quality Model ──────────────────────────────────────────
+  quality:
+    enabled: true
+    min_quality_score: 0
+    dimension_weights:
+      evidence_completeness: 0.20
+      zone_confluence: 0.20
+      structure_clarity: 0.15
+      liquidity_confirmation: 0.15
+      premium_discount_alignment: 0.15
+      session_quality: 0.15
+    tier_thresholds:
+      high: 80
+      medium: 60
+
+  # ── Persistence ─────────────────────────────────────────────────────
+  persistence:
+    enabled: true
+    sqlite_table: decisions
+    retain_days: 90
+
+engines:
+  market_decision: true

@@ -1,0 +1,81 @@
+# Mitigation Block Engine configuration (Sprint 7.2)
+market_mitigation:
+  enabled: true
+  timeframes:
+    - M15
+    - H1
+    - H4
+  min_candles: 20
+  lookback: 100
+  pip_size: 0.1
+
+  # Formation
+  min_displacement_pips: 5.0
+  min_zone_size_pips: 1.5
+  zone_bound_mode: body
+  require_bos_displacement: false
+  deduplicate_by_origin: true
+
+  # Touch / mitigation
+  mitigation_mode: wick
+  full_mitigation_percent: 75.0
+  ce_mitigation_enabled: false
+  min_bars_between_touches: 1
+  min_bars_after_formation: 1
+
+  # Confirmation
+  confirmation_mode: wick_touch
+  min_touch_count: 1
+  require_displacement_after_touch: false
+  rejection_wick_ratio: 0.5
+  require_structure_alignment: false
+
+  # Lifecycle
+  max_block_age_bars: 150
+  invalidation_mode: close
+  invalidate_used_blocks: false
+  invalidate_on_choch: false
+  invalidate_on_parent_invalidated: true
+
+  # Structure scope
+  structure_scope_mode: both
+  dealing_range_mode: external
+
+  # MTF
+  htf_overlap_min_percent: 25.0
+  ltf_nesting_enabled: true
+
+  # Nesting
+  nest_overlap_min_percent: 80.0
+  confluence_formation_enabled: true
+
+  # Premium / discount
+  equilibrium_tolerance_pips: 3.0
+
+  # Confluence
+  use_liquidity_confluence: true
+  liquidity_proximity_pips: 5.0
+  use_order_block_confluence: true
+  ob_overlap_min_percent: 15.0
+  use_fvg_confluence: true
+  fvg_ce_proximity_pips: 3.0
+  fvg_overlap_min_percent: 10.0
+  use_breaker_confluence: true
+  breaker_overlap_min_percent: 15.0
+
+  # Quality & filtering
+  min_quality_score: 0.4
+  quality_weights:
+    displacement: 0.20
+    structure: 0.15
+    structure_scope: 0.10
+    liquidity: 0.10
+    order_block: 0.10
+    fvg: 0.10
+    breaker: 0.05
+    htf_alignment: 0.10
+    confirmation: 0.05
+    freshness: 0.05
+
+engines:
+  market_mitigation: true

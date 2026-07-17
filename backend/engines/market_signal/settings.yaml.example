@@ -1,0 +1,134 @@
+# Signal Engine configuration (Sprint 11.2)
+market_signal:
+  enabled: true
+  symbol: GOLD.i#
+  timeframe: M15
+  pip_size: 0.1
+
+  # Signal lifecycle
+  auto_activate: true
+  signal_validity_minutes: 60
+  max_decision_age_seconds: 300
+  debounce_seconds: 3
+  raise_on_error: false
+
+  # ── Validation ────────────────────────────────────────────────────
+  validation:
+    min_confidence: 65
+    min_decision_quality: 60
+    require_evidence_summary: true
+    require_risk_summary: true
+
+  # ── Duplicate Detection ─────────────────────────────────────────
+  duplicate:
+    enabled: true
+    window_minutes: 60
+    entry_tolerance_pips: 5.0
+    reject_same_decision_id: true
+
+  # ── Session Validation (decision-derived) ───────────────────────
+  session:
+    enabled: true
+    blocked_sessions: []
+    require_session_allowed: true
+
+  # ── Risk Validation (decision-derived) ────────────────────────────
+  risk:
+    min_risk_reward: 2.0
+    max_risk_reward: 8.0
+    require_min_rr_met: true
+    require_max_rr_met: true
+    require_spread_acceptable: true
+    require_stop_size_acceptable: true
+    require_confidence_acceptable: true
+
+  # ── Entry Normalization ───────────────────────────────────────────
+  entry:
+    zone_resolution: midpoint
+    buy_zone_edge: zone_low
+    sell_zone_edge: zone_high
+
+  # ── Take Profit Mapping ───────────────────────────────────────────
+  take_profit:
+    max_targets: 3
+    require_minimum_one: true
+
+  # ── Signal Quality Scoring ────────────────────────────────────────
+  quality:
+    min_signal_quality: 0
+
+    weights:
+      decision_confidence: 0.25
+      decision_quality: 0.20
+      risk_clarity: 0.15
+      entry_precision: 0.10
+      target_structure: 0.10
+      evidence_completeness: 0.10
+      explainability: 0.10
+
+    adjustments:
+      duplicate_proximity_penalty: 10
+      stale_decision_penalty_max: 15
+      warning_penalty_per_item: 2
+      warning_penalty_max: 10
+      multi_tp_bonus: 5
+
+    tiers:
+      high: 80
+      medium: 60
+
+    entry_precision_scores:
+      point: 100
+      ote: 85
+      zone: 70
+
+    target_structure_scores:
+      one_tp: 60
+      two_tp: 80
+      three_tp: 100
+
+  # ── Lifecycle Management ─────────────────────────────────────────
+  lifecycle:
+    enabled: true
+
+    break_even:
+      enabled: true
+      trigger_after: TP1_HIT
+      offset_pips: 1.0
+
+    trailing:
+      enabled: false
+      trigger_after: TP1_HIT
+      trail_distance_pips: 15.0
+      step_pips: 5.0
+
+    partial_fill:
+      enabled: false
+      default_fill_pct: 50
+
+    entry_trigger:
+      mode: touch
+      tolerance_pips: 1.0
+
+    tp_trigger:
+      mode: touch
+      tolerance_pips: 0.5
+
+    sl_trigger:
+      mode: touch
+      tolerance_pips: 0.5
+
+  # ── Events ────────────────────────────────────────────────────────
+  events:
+    publish_rejections: false
+    publish_lifecycle_events: true
+
+  # ── Persistence ───────────────────────────────────────────────────
+  persistence:
+    enabled: true
+    sqlite_table: signals
+    retain_days: 90
+    store_rejections: false
+
+engines:
+  market_signal: true
